@@ -17,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	kclient "github.com/GoogleCloudPlatform/kubernetes/pkg/client"
 	"github.com/coreos/go-etcd/etcd"
 	"github.com/miekg/dns"
 
@@ -27,14 +28,16 @@ import (
 )
 
 var (
-	tlskey     = ""
-	tlspem     = ""
-	cacert     = ""
-	config     = &server.Config{ReadTimeout: 0, Domain: "", DnsAddr: "", DNSSEC: ""}
-	nameserver = ""
-	machine    = ""
-	discover   = false
-	stub       = false
+	tlskey       = ""
+	tlspem       = ""
+	cacert       = ""
+	config       = &server.Config{ReadTimeout: 0, Domain: "", DnsAddr: "", DNSSEC: ""}
+	nameserver   = ""
+	machine      = ""
+	discover     = false
+	stub         = false
+	kubernetes   = false
+	clientConfig = &kclient.Config{}
 )
 
 func env(key, def string) string {
@@ -61,6 +64,7 @@ func init() {
 	flag.BoolVar(&stub, "stubzones", false, "support stub zones")
 	flag.BoolVar(&config.Verbose, "verbose", false, "log queries")
 	flag.BoolVar(&config.Systemd, "systemd", false, "bind to socket(s) activated by systemd (ignore -addr)")
+	flag.BoolVar(&kubernetes, "kubernetes", false, "read endpoints from a kubernetes master")
 
 	// TTl
 	// Minttl
@@ -156,6 +160,10 @@ func main() {
 				}
 			}
 		}()
+	}
+
+	if kubernetes {
+		go WatchKubernetes(client)
 	}
 
 	stats.Collect()  // Graphite
