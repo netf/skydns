@@ -21,11 +21,11 @@ import (
 	"github.com/coreos/go-etcd/etcd"
 	"github.com/miekg/dns"
 
-	backendetcd "github.com/skynetservices/skydns/backends/etcd"
-	"github.com/skynetservices/skydns/backends/kubernetes"
-	"github.com/skynetservices/skydns/msg"
-	"github.com/skynetservices/skydns/server"
-	"github.com/skynetservices/skydns/stats"
+	backendetcd "github.com/netf/skydns/backends/etcd"
+	"github.com/netf/skydns/backends/kubernetes"
+	"github.com/netf/skydns/msg"
+	"github.com/netf/skydns/server"
+	"github.com/netf/skydns/stats"
 )
 
 var (
