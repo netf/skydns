@@ -22,7 +22,7 @@ import (
 	"github.com/miekg/dns"
 
 	backendetcd "github.com/netf/skydns/backends/etcd"
-	"github.com/netf/skydns/backends/kubernetes"
+	kube "github.com/netf/skydns/backends/kubernetes"
 	"github.com/netf/skydns/msg"
 	"github.com/netf/skydns/server"
 	"github.com/netf/skydns/stats"
@@ -164,7 +164,7 @@ func main() {
 	}
 
 	if kubernetes {
-		go WatchKubernetes(client)
+		go kube.WatchKubernetes(client)
 	}
 
 	stats.Collect()  // Graphite

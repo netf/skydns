@@ -1,7 +1,7 @@
 package kubernetes
 
 import (
-	//	"flag"
+	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -16,7 +16,13 @@ import (
 	pconfig "github.com/GoogleCloudPlatform/kubernetes/pkg/proxy/config"
 	"github.com/GoogleCloudPlatform/kubernetes/pkg/util"
 	"github.com/coreos/go-etcd/etcd"
-	"github.com/skynetservices/skydns/msg"
+	"github.com/netf/skydns/msg"
+	"github.com/netf/skydns/server"
+)
+
+var (
+	config       = &server.Config{ReadTimeout: 0, Domain: "", DnsAddr: "", DNSSEC: ""}
+	clientConfig = &client.Config{}
 )
 
 // The periodic interval for checking the state of things.
@@ -132,8 +138,31 @@ type serviceInfo struct {
 	active     bool
 }
 
+type FlagSet struct {
+}
+
+func (f *FlagSet) StringVar(p *string, name, value, usage string) {
+	flag.StringVar(p, name, value, usage)
+}
+func (f *FlagSet) BoolVar(p *bool, name string, value bool, usage string) {
+	flag.BoolVar(p, name, value, usage)
+}
+func (f *FlagSet) DurationVar(p *time.Duration, name string, value time.Duration, usage string) {
+	flag.DurationVar(p, name, value, usage)
+}
+func (f *FlagSet) IntVar(p *int, name string, value int, usage string) {
+	flag.IntVar(p, name, value, usage)
+}
+
+func (f *FlagSet) UintVar(p *uint, name string, value uint, usage string) {
+	flag.UintVar(p, name, value, usage)
+}
+func (f *FlagSet) Float32Var(p *float32, name string, value float32, usage string) {
+	return
+}
+
 func init() {
-	client.BindClientConfigFlags(flag.CommandLine, clientConfig)
+	client.BindClientConfigFlags(&FlagSet{}, clientConfig)
 }
 
 func WatchKubernetes(eclient *etcd.Client) {
