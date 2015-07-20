@@ -22,6 +22,7 @@ import (
 	"github.com/miekg/dns"
 
 	backendetcd "github.com/skynetservices/skydns/backends/etcd"
+	"github.com/skynetservices/skydns/backends/kubernetes"
 	"github.com/skynetservices/skydns/msg"
 	"github.com/skynetservices/skydns/server"
 	"github.com/skynetservices/skydns/stats"

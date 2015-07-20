@@ -1,4 +1,4 @@
-package main
+package kubernetes
 
 import (
 	//	"flag"
@@ -133,7 +133,7 @@ type serviceInfo struct {
 }
 
 func init() {
-	//	client.BindClientConfigFlags(flag.CommandLine, clientConfig)
+	client.BindClientConfigFlags(flag.CommandLine, clientConfig)
 }
 
 func WatchKubernetes(eclient *etcd.Client) {
